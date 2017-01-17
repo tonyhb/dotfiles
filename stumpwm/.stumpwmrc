@@ -1,0 +1,36 @@
+(in-package :stumpwm)
+
+(set-prefix-key (kbd "C-i"))
+
+;; Set mouse focus
+(setf *mouse-focus-policy* :click)
+
+;; Theme
+(set-fg-color "white smoke")
+(set-bg-color "grey20")
+(set-border-color "chocolate")
+(set-msg-border-width 1)
+(setf *message-window-padding* 1)
+
+;; Internets
+(define-key *root-map* (kbd "b") "exec google-chrome-stable --disable-gpu")
+
+;; Screen-lock
+(define-key *root-map* (kbd "C-l") "exec xlock")
+
+;; Mode-line
+(mapcar #'load-module '("cpu"
+	"mem"
+	"net"
+	"wifi"
+	"disk"
+	"battery-portable"
+	"notiications"))
+
+
+;; (set-font "-*-envy code r-normal")
+
+(stumpwm:toggle-mode-line (stumpwm:current-screen) (stumpwm:current-head))
+
+(setf stumpwm:*screen-mode-line-format*
+	(list '(:eval (run-shell-command "date '+%R, %F %a'|tr -d [:cntrl:]" t)) " | Battery: %B | %c (%t) | %l | [^B%n^b] %W"))
